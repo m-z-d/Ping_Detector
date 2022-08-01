@@ -16,7 +16,7 @@ def ping_display():
     ping_int=int(ping_ms[:-2])
     with open("example2.csv",'a') as f:
         print(f'"{ping_counter}","{ping_int}"',file=f)
-    root.wm_title(ping_ms+"►"+website_to_ping)
+    root.title(ping_ms+"►"+website_to_ping)
     
 root.after(100,ping_display)
 root.mainloop()
