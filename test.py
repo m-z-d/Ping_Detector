@@ -5,6 +5,8 @@ process=subprocess.Popen(["ping",website_to_ping,"-t"],stdout=subprocess.PIPE,un
   #open a pipe from the ping command to the application
 root=tkinter.Tk()
 ping_counter=-3
+with open(r"example2.csv",'a') as f:
+  print(f"\"Ping response times from {website_to_ping}\"",file=f)
 def ping_display():
     root.after(100,ping_display)
     global process
@@ -14,8 +16,8 @@ def ping_display():
     if ping_counter<0: return
     ping_ms=ping_stat.split('time=')[-1].split()[0]
     ping_int=int(ping_ms[:-2])
-    with open("example2.csv",'a') as f:
-        print(f'"{ping_counter}","{ping_int}"',file=f)
+    with open(r"example2.csv",'a') as f:
+        print(f'"{ping_int}"',file=f)
     root.title(ping_ms+"►"+website_to_ping)
     
 root.after(100,ping_display)

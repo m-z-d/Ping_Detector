@@ -6,10 +6,29 @@ import pandas as pd
 from PIL import Image as img
 from PIL import ImageTk as tkimg
 
+DEBUG=True
+
 def silence_exception(func,exception):
     try:func()
     except exception:pass
-
+def ping_button_function(website_to_ping="google.com"):
+    global process
+    process=sp.Popen(["ping",website_to_ping,"-t"],stdout=sp.PIPE,universal_newlines=True)
+    root.after(200,ping_display('google.com'))
+ping_counter=-3
+def ping_display(website):
+    root.after(100,ping_display)
+    global process
+    global ping_counter
+    ping_stat=process.stdout.readline()
+    ping_counter+=1
+    if ping_counter<0: return
+    ping_ms=ping_stat.split('time=')[-1].split()[0]
+    ping_int=int(ping_ms[:-2])
+    with open(r"example2.csv",'a') as f:
+        print(f'"{ping_int}"',file=f)
+    if DEBUG:print('ping: '+ping_ms+f"({ping_int})")
+    root.title(ping_ms+"►"+website)
 root=tk.Tk()
 root.configure(bg='#202020')
 root.title("Pinging...")
