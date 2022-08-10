@@ -24,11 +24,11 @@ class MainApp(tk.Tk):
         self.display_graph_1= not self.display_graph_1
         if self.display_graph_1:
             self.ax.clear()
-            self.ax.plot(self.dataf1)
+            self.ax.plot(self.dataf1,"o--r")
             self.main_window_graph.draw()
         else:
             self.ax.clear()
-            self.ax.plot(self.dataf2)
+            self.ax.plot(self.dataf2,"v:m")
             self.main_window_graph.draw()
     def GenerateGraphs(self):
         self.data1=pd.read_csv(r"Ping_detector/example2.csv")
