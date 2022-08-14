@@ -11,19 +11,20 @@ import logging as lg
 import CustomExceptionHandler
 lg.basicConfig(level=lg.INFO)
 class App(tk.Tk):
-    def __init__(self,output_csv:str|None=r"example4.csv",input_url:str|None="python.org") -> None:
+    def __init__(self,output_csv:str|None=r"example5.csv",input_url:str|None="python.org") -> None:
         super().__init__()
         self.resizable(width=False, height=False)  #custom window settings
+        self.configure(bg='#ffffff')
 
 
         self.output_csv=output_csv
         self.pinged_adress=input_url
-        self.MakeWidgets()
         self.ping_stream=sp.Popen(["ping",str(self.pinged_adress),"-t"],stdout=sp.PIPE,universal_newlines=True)
         with open(self.output_csv,'w')as f:
-            print("",file=f,end='')  #clearing the file contents. (yes, inefficient, but it's enough)
+            print('',file=f,end='')  #clearing the file contents. (yes, inefficient, but it's enough)
         with open(self.output_csv,'a') as f:
-            print("\"time(s)\",\"Ping(ms)\"",file=f)
+            print("\"time(s)\",\"ping(ms)\"\n\"0\",\"0\"",file=f)
+        self.MakeWidgets()
         self.start_time_value=perf_counter()
         self.ReadPingStream()
 
@@ -39,13 +40,41 @@ class App(tk.Tk):
         self.title(f"{self.current_ping_time}ms►{self.pinged_adress}")
         with open(self.output_csv,'a') as f:
             print(f"\"{self.time_since_start}\",\"{self.current_ping_time}\"",file=f)
+        self.RedrawGraph()
+
+    def RedrawGraph(self):
+        df=pd.read_csv(self.output_csv)
+        self.ax.clear()
+        self.ax.plot(df["time(s)"],df["ping(ms)"],linestyle=':',color="#cfd5ff",lw=2)
+        self.graph.draw()
 
     def MakeWidgets(self):
-        self.top_label=tk.Label(self,text=f'pinging {self.pinged_adress}...',font=("Arial","20"))
-        self.explaining_label=tk.Label(self,text="")
-
+        self.top_label=tk.Label(self,
+            text=f'pinging {self.pinged_adress}...',
+            font=("Arial","20"),
+            bg="#ffffff")
+        self.explaining_label=tk.Label(self,
+            text="the graph represents the values written in the specified CSV file.",
+            font=("Arial",8),
+            bg="#ffffff")
+        self.GenerateGraphs()
+        self.graph.get_tk_widget().pack(side=tk.BOTTOM)
         self.top_label.pack(side=tk.TOP)
         self.explaining_label.pack(side=tk.TOP)
+    def GenerateGraphs(self):
+        df=pd.read_csv(self.output_csv)
+        self.fig=plt.Figure(
+            figsize=(16,9),
+             dpi=50,
+             facecolor="#202020",)
+        self.ax:plt.Axes=self.fig.add_subplot()
+        self.ax.set_facecolor("#202020")
+        self.ax.tick_params(which="both",colors="#cfd5ff",length=5,labelsize=20)
+        for i in self.ax.spines.values():
+            i.set_color("#cfd5ff")
+        self.graph=tkBEnd.FigureCanvasTkAgg(self.fig,master=self)
+        self.ax.plot(df,'o--b')
+        self.graph.draw()
 
 
         
@@ -53,5 +82,5 @@ class App(tk.Tk):
 
 
 
-app=App(input_url="google.com")
+app=App(input_url="kakuzocraft.xyz")
 app.mainloop()
