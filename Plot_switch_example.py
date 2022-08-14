@@ -28,13 +28,11 @@ class MainApp(tk.Tk):
             self.main_window_graph.draw()
         else:
             self.ax.clear()
-            self.ax.plot(self.dataf2,"v:m")
+            self.ax.plot(self.dataf2["time(s)"],self.dataf2["Ping(ms)"],"v:m")
             self.main_window_graph.draw()
     def GenerateGraphs(self):
-        self.data1=pd.read_csv(r"Ping_detector/example2.csv")
-        self.data2=pd.read_csv(r"Ping_detector/example.csv")
-        self.dataf1=pd.DataFrame(self.data1)
-        self.dataf2=pd.DataFrame(self.data2)
+        self.dataf1=pd.read_csv(r"example2.csv")
+        self.dataf2=pd.read_csv(r"example4.csv")
         self.fig=plt.Figure()
         self.ax=self.fig.add_subplot()
         self.ax.plot(self.dataf1)[0]
