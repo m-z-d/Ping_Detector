@@ -30,7 +30,6 @@ def ping_display(website):
     if DEBUG:print('ping: '+ping_ms+f"({ping_int})")
     root.title(ping_ms+"►"+website)
 root=tk.Tk()
-root.configure(bg='#202020')
 root.title("Pinging...")
 root.resizable(width=False, height=False)
 root.wm_attributes("-transparentcolor", 'grey')
@@ -49,7 +48,7 @@ AboutButton=tk.Button(
     command=lambda : silence_exception(lambda :sp.run(['notepad',r'Ping_detector/README.md'],
     shell=True,timeout=0.1),sp.TimeoutExpired) #opens essential info for the user in a separate program
     ) #stdout uncluttered by ignoring timeout exception
-OptionsImage=tkimg.PhotoImage(img.open(r"Ping_detector/settings.png"))
+OptionsImage=tkimg.PhotoImage(img.open(r"settings.png"))
 OptionsButton=tk.Button(
     root,image=OptionsImage,height=21,width=24,bg='#202020',fg="#cfd5ff",
     command=lambda: silence_exception(lambda :sp.run(['notepad',r'Ping_detector/OPTIONS.json'],

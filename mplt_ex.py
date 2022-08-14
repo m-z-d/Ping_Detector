@@ -10,12 +10,14 @@ def increase_counter():
     counter +=1
     if counter%2==1:
         print('A'+str(counter))
+        ax.clear()
         dataf2.plot(kind="line", legend=True, ax=ax)
     else:
         print('B'+str(counter))
+        ax.clear()
         dataf1.plot(kind="line", legend=True, ax=ax)
-data1=pd.read_csv(r"Ping_detector/example2.csv")
-data2=pd.read_csv(r"Ping_detector/example.csv")
+data1=pd.read_csv(r"example2.csv")
+data2=pd.read_csv(r"example1.csv")
 dataf1=pd.DataFrame(data1)
 dataf2=pd.DataFrame(data2)
 print(dataf1)
