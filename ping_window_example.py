@@ -47,6 +47,7 @@ class App(tk.Tk):
         self.ax.clear()
         self.ax.plot(df["time(s)"],df["ping(ms)"],linestyle=':',color="#cfd5ff",lw=2)
         self.graph.draw()
+        self.fig.savefig("Figure.svg")
 
     def MakeWidgets(self):
         self.top_label=tk.Label(self,
@@ -63,13 +64,14 @@ class App(tk.Tk):
         self.explaining_label.pack(side=tk.TOP)
     def GenerateGraphs(self):
         df=pd.read_csv(self.output_csv)
-        self.fig=plt.Figure(
+        self.fig:plt.Figure=plt.Figure(
             figsize=(16,9),
              dpi=50,
              facecolor="#202020",)
         self.ax:plt.Axes=self.fig.add_subplot()
         self.ax.set_facecolor("#202020")
         self.ax.tick_params(which="both",colors="#cfd5ff",length=5,labelsize=20)
+        self.ax.yaxis.label
         for i in self.ax.spines.values():
             i.set_color("#cfd5ff")
         self.graph=tkBEnd.FigureCanvasTkAgg(self.fig,master=self)
