@@ -14,7 +14,7 @@ class App(tk.Tk):
     def __init__(self,output_csv:str|None=r"example5.csv",input_url:str|None="python.org") -> None:
         super().__init__()
         self.resizable(width=False, height=False)  #custom window settings
-        self.configure(bg='#ffffff')
+        self.configure(bg='#202020')
 
 
         self.output_csv=output_csv
@@ -46,6 +46,8 @@ class App(tk.Tk):
         df=pd.read_csv(self.output_csv)
         self.ax.clear()
         self.ax.plot(df["time(s)"],df["ping(ms)"],linestyle=':',color="#cfd5ff",lw=2)
+        self.ax.set_ylabel("Ping response time(ms)",size=20,color="#cfd5ff")
+        self.ax.set_xlabel("Time since start(ms)",size=20,color="#cfd5ff")
         self.graph.draw()
         self.fig.savefig("Figure.svg")
 
@@ -53,11 +55,11 @@ class App(tk.Tk):
         self.top_label=tk.Label(self,
             text=f'pinging {self.pinged_adress}...',
             font=("Arial","20"),
-            bg="#ffffff")
+            bg="#202020",fg="#cfd5ff")
         self.explaining_label=tk.Label(self,
-            text="the graph represents the values written in the specified CSV file.",
+            text="the graph represents the values written in the specified CSV file.\nA hole in the graph represents a ping timeout",
             font=("Arial",8),
-            bg="#ffffff")
+            bg="#202020",fg="#cfd5ff")
         self.GenerateGraphs()
         self.graph.get_tk_widget().pack(side=tk.BOTTOM)
         self.top_label.pack(side=tk.TOP)
@@ -71,9 +73,14 @@ class App(tk.Tk):
         self.ax:plt.Axes=self.fig.add_subplot()
         self.ax.set_facecolor("#202020")
         self.ax.tick_params(which="both",colors="#cfd5ff",length=5,labelsize=20)
-        self.ax.yaxis.label
-        for i in self.ax.spines.values():
-            i.set_color("#cfd5ff")
+        self.ax.set_ylabel("Ping response time(ms)")
+        self.ax.set_xlabel("Time since start(ms)")
+        # for i in self.ax.spines.values():
+        #     i.set_color("#cfd5ff")
+        self.ax.spines['bottom'].set_color("#cfd5ff")
+        self.ax.spines['left'].set_color("#cfd5ff")
+        self.ax.spines['top'].set_color("#202020")
+        self.ax.spines['right'].set_color("#202020")
         self.graph=tkBEnd.FigureCanvasTkAgg(self.fig,master=self)
         self.ax.plot(df,'o--b')
         self.graph.draw()
@@ -84,5 +91,5 @@ class App(tk.Tk):
 
 
 
-app=App(input_url="kakuzocraft.xyz")
+app=App()
 app.mainloop()
