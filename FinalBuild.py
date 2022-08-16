@@ -9,25 +9,53 @@ import subprocess as sp
 import re as re
 import logging as lg
 import CustomExceptionHandler
+from PIL import Image as img
+from PIL import ImageTk as tkimg
 lg.basicConfig(level=lg.INFO)
-
+def silence_exception(func,exception):
+    try:func()
+    except exception:pass
 class UtilityContainer(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
+        self.configure(bg="#202020")
         self.WelcomeApp=WelcomeScreenApp(self)
         self.pingApp=PingGraphingApp(self)
+        self.WelcomeApp.init()
+    def switchApp():
+        pass
 class WelcomeScreenApp(tk.Frame):
-    def __init__(self,master:tk.Tk):
+    def __init__(self,master:UtilityContainer):
         super().__init__(master,bg="#202020")
         self.master=master
-    def init():
+    def init(self,*argv):
+        self.GridWidgets()
+    def GridWidgets(self):
+        self.welcome_label=tk.Label(
+        self.master,text="Welcome!",font=("Arial","25"),width=20,
+        bg='#202020',fg="#cfd5ff",cursor="tcross"
+        )
+        self.version_label=tk.Label(
+        self.master,text="to Ping Detector vα0.01",font=("Arial","15"),
+        bg='#202020',fg="#cfd5ff"
+        )
+        self.about_button=tk.Button(
+        self.master,text="About...",font=("Arial","10"),width=21,bg='#202020',fg="#cfd5ff",
+        command=lambda :silence_exception(lambda :sp.run(['notepad',r'README.md'],
+        shell=True,timeout=0.1),sp.TimeoutExpired) #opens essential info for the user in a separate program
+        ) #stdout uncluttered by ignoring timeout exception
+
+
+        self.welcome_label.grid(row=0,column=0,columnspan=5)
+        self.version_label.grid(row=1,column=0,columnspan=5)
+        self.about_button.grid(row=2,column=0,columnspan=2)
         pass
 
 
 
 class PingGraphingApp(tk.Frame):
     """Main ping detector app"""
-    def __init__(self,master:tk.Tk):
+    def __init__(self,master:UtilityContainer):
         super().__init__(master,bg="#202020")
         self.master=master
     def init(self,output_csv:str|None=r"example5.csv",input_url:str|None="python.org"):
@@ -107,5 +135,4 @@ class PingGraphingApp(tk.Frame):
         self.graph.draw()
 
 root=UtilityContainer()
-root.pingApp.init()
 root.mainloop()
