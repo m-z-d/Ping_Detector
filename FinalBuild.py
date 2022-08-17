@@ -125,12 +125,12 @@ class PingGraphingApp(tk.Frame):
         super().__init__(master, bg="#202020")
         self.master = master
 
-    def init(self, output_csv: str | None = r"example5.csv", input_url: str | None = "python.org"):
+    def init(self, output_csv: str | None = r"Untitled.csv", input_url: str | None = "python.org"):
         # custom window settings
         self.master.resizable(width=False, height=False)
         self.pack()
 
-        if output_csv is None:self.output_csv=r"example5.csv"
+        if output_csv is None:self.output_csv=r"Untitled.csv"
         else:self.output_csv = output_csv  #catch NoneTypes
         if input_url is None:self.pinged_adress="python.org"
         else:self.pinged_adress = input_url
