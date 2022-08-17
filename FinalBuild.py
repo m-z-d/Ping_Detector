@@ -32,17 +32,22 @@ class UtilityContainer(tk.Tk):
         self.current_app="WelcomeApp"
         self.WelcomeApp.init()
 
-    def switchApp(self, file: str | None = r"example5.csv", adress: str | None = "python.org"):
+    def switchApp(self, file: str | None = r"Untitled.csv", adress: str | None = "python.org"):
+        self.resizable(width=True, height=True)
         if self.current_app=="WelcomeApp":
             lg.info("switching to PingApp")
             for i in self.grid_slaves():
-                i.destroy()
+                i.grid_forget()
             self.current_app="PingApp"
+            lg.info("DEBUG EINS")
             self.PingApp.init(output_csv=file,input_url=adress)
         else:
             lg.info("switching to WelcomeApp")
             for i in self.pack_slaves():
-                i.destroy()
+                i.pack_forget()
+                for j in i.pack_slaves():
+                    j.pack_forget()
+            lg.info("DEBUG ZWEI")
             self.PingApp.ping_stream=None  #stop the stream to limit CPU/RAM usage
             self.after_cancel(self.PingApp.after_method_id)
             self.current_app="WelcomeApp"
@@ -54,9 +59,10 @@ class WelcomeScreenApp(tk.Frame):
         super().__init__(master)
         self.master = master
         self.filename=None
-        self.adress=None
+        self.adress=tk.StringVar(self.master,"python.org")
+        self.master.resizable(width=False, height=False)
 
-    def init(self, *argv):
+    def init(self):
         self.GridWidgets()
 
     def GridWidgets(self):
@@ -82,7 +88,7 @@ class WelcomeScreenApp(tk.Frame):
         )
         self.ping_button = tk.Button(
             self.master, text="Ping!", font=("Arial", "10"), width=21, bg='#202020', fg="#cfd5ff",
-            relief='flat',command=lambda:self.master.switchApp(file=self.filename,adress=self.adress)
+            relief='flat',command=lambda:self.master.switchApp(file=self.filename,adress=self.adress.get())
         )
         self.entry_label=tk.Label(
             self.master, text="Enter the adress you want to ping and choose where you want to save the data:", font=("Arial", 7), width=70,
@@ -111,6 +117,7 @@ class WelcomeScreenApp(tk.Frame):
         if file is not None:
             lg.info(f"opened {file.name}")
             self.filename=file.name
+        else:self.filename="Untitled.csv"
 
 class PingGraphingApp(tk.Frame):
     """Main ping detector app"""
@@ -121,7 +128,7 @@ class PingGraphingApp(tk.Frame):
 
     def init(self, output_csv: str | None = r"example5.csv", input_url: str | None = "python.org"):
         # custom window settings
-        self.master.resizable(width=True, height=True)
+        self.master.resizable(width=False, height=False)
         self.pack()
 
         if output_csv is None:self.output_csv=r"example5.csv"
