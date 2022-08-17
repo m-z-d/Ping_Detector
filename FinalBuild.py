@@ -8,12 +8,11 @@ import tkinter as tk
 import subprocess as sp
 import re as re
 import logging as lg
-import CustomExceptionHandler
 from PIL import Image as img
 from PIL import ImageTk as tkimg
 from tkinter import messagebox as tkmb
 from tkinter import filedialog as tkfd
-lg.basicConfig(level=lg.INFO)
+lg.basicConfig(level=lg.INFO,filename="PingDetector.log")
 
 
 def silence_exception(func, exception):
@@ -22,10 +21,10 @@ def silence_exception(func, exception):
     except exception:
         pass
 
-
 class UtilityContainer(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
+        self.title("Ping Graphing App")
         self.configure(bg="#202020")
         self.WelcomeApp = WelcomeScreenApp(self)
         self.PingApp = PingGraphingApp(self)
@@ -82,7 +81,7 @@ class WelcomeScreenApp(tk.Frame):
         self.options_image = tkimg.PhotoImage(img.open(r"settings.png"))
         self.options_button = tk.Button(
             self.master, image=self.options_image, height=21, width=24, bg='#202020', fg="#cfd5ff",
-            command=lambda: silence_exception(lambda: sp.run(['notepad', r'OPTIONS.json'],
+            command=lambda: silence_exception(lambda: sp.run(['notepad', r'SETTINGS.json'],
                                                              shell=True, timeout=0.1, stderr=None), sp.TimeoutExpired),
             relief='flat'
         )
