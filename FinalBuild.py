@@ -60,9 +60,9 @@ class WelcomeScreenApp(tk.Frame):
         self.master = master
         self.filename=None
         self.adress=tk.StringVar(self.master,"python.org")
-        self.master.resizable(width=False, height=False)
 
     def init(self):
+        self.master.resizable(width=False, height=False)
         self.GridWidgets()
 
     def GridWidgets(self):
